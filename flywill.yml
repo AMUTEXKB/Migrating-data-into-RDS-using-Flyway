@@ -164,6 +164,8 @@ Metadata:
         - 2a498d1e-391a-4660-84ac-d185bf742d32
         - 2a498d1e-391a-4660-84ac-d185bf742d32
         - 2a498d1e-391a-4660-84ac-d185bf742d32
+        - 2a498d1e-391a-4660-84ac-d185bf742d32
+        - 2a498d1e-391a-4660-84ac-d185bf742d32
       dependson:
         - 5f10df8b-874d-48a9-8d6f-a15aab36e272
     96d93b64-c2e5-4333-bbbb-91164e368942:
@@ -208,6 +210,8 @@ Metadata:
       parent: 96d93b64-c2e5-4333-bbbb-91164e368942
       embeds: []
       iscontainedinside:
+        - 96d93b64-c2e5-4333-bbbb-91164e368942
+        - 96d93b64-c2e5-4333-bbbb-91164e368942
         - 96d93b64-c2e5-4333-bbbb-91164e368942
         - 96d93b64-c2e5-4333-bbbb-91164e368942
         - 96d93b64-c2e5-4333-bbbb-91164e368942
@@ -298,6 +302,8 @@ Metadata:
         - a965ca98-891c-4d69-a7fc-e1df4951cdd7
         - a965ca98-891c-4d69-a7fc-e1df4951cdd7
         - a965ca98-891c-4d69-a7fc-e1df4951cdd7
+        - a965ca98-891c-4d69-a7fc-e1df4951cdd7
+        - a965ca98-891c-4d69-a7fc-e1df4951cdd7
       dependson:
         - 0f362326-71c6-48b4-90fc-edf9dfee2835
     e0fa228c-9b66-4b6b-bfe4-4bb1c4a9c279:
@@ -330,6 +336,8 @@ Metadata:
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
+        - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
+        - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
     e44d345b-5717-4de3-97ce-662f120e85da:
       size:
         width: 60
@@ -341,6 +349,8 @@ Metadata:
       parent: c3acf241-f90d-4eb2-9020-fbe5bd0969d5
       embeds: []
       iscontainedinside:
+        - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
+        - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
         - c3acf241-f90d-4eb2-9020-fbe5bd0969d5
@@ -405,6 +415,8 @@ Metadata:
       parent: b6ccfd78-760d-418a-b5ff-bc7e44a2bb27
       embeds: []
       iscontainedinside:
+        - b6ccfd78-760d-418a-b5ff-bc7e44a2bb27
+        - b6ccfd78-760d-418a-b5ff-bc7e44a2bb27
         - b6ccfd78-760d-418a-b5ff-bc7e44a2bb27
 Resources:
   vpc:
@@ -736,9 +748,6 @@ Resources:
           DeviceIndex: '0'
           SubnetId:
             Ref: PublicSubnet1
-      Metadata:
-        'AWS::CloudFormation::Designer':
-          id: 673c9a12-5017-4b82-9916-d5724fceaf4c
     Metadata:
       'AWS::CloudFormation::Designer':
         id: 085525b2-349d-4baa-a69c-baeb6f97d4ce
