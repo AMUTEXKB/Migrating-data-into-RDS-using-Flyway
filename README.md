@@ -1,4 +1,8 @@
 # This hands-on project will guide you through the process of migrating SQL data into an Amazon RDS database using FLYWAY.
+ In this project you would learn how to setup the necessary resources to migrate data to RDS using FLYWAY this includes setting up your VPC,Natgateway,securitygroup,RDS,Keypair,Bastion host and FLYWAY.
+ To use FLYWAY to migrate data into RDS instance in the private subnet,first we would have to download and configure flyway on our computer ,after that we would launch a Bastionhost in the public subnet once we have launched the Bastion host in the public subnet we will create an SSH tunnel to the rds instance through the Bastion host .
+ Once the SSH tunnelis setup, we will use flyway to migrate the data into the RDS database in the private subnet
+ 
 
 STEP 1
 ## Building a 3-tier VPC with public and private subnets in two Availability Zones (AZs) using AWS CloudFormation can be done using the following steps:Building a 3-tier VPC with public and private subnets in 2 AZs
