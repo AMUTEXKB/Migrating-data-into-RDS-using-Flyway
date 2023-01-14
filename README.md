@@ -19,7 +19,7 @@ syntax:
           Value: production
 ```
 
-### and use the AWS::EC2::Subnet resource type to define the public and private subnets in each AZ.
+### and use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
 syntax:
 ```
  PublicSubnet1:
@@ -56,3 +56,30 @@ syntax:
         - Key: stack
           Value: production
 ```          
+
+### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
+syntax:
+```
+  databasesg:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow ssh to client database
+      VpcId: !Ref vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref bastionhostsg
+
+  bastionhostsg:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !Ref vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 102.89.23.192/32
+
+```
