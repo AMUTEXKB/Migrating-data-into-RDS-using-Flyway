@@ -105,6 +105,45 @@ syntax:
           Value: production
 		  
 ```          
+### Use the AWS::EC2::RouteTable resource type to define the Public RouteTable ,and use the AWS::EC2::Route resource type to connect the RouteTable to the InternetGateway.
+syntax:
+```
+  Publicroutetable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId:
+        Ref: vpc
+      Tags:
+        - Key: stack
+          Value: production
+
+  Publicroute:
+    Type: 'AWS::EC2::Route'
+    DependsOn: igwa
+    Properties:
+      RouteTableId:
+        Ref: Publicroutetable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: igw
+
+```
+### To associate the two public subnet we created earlier to the RouteTable we  use the AWS::EC2::SubnetRouteTableAssociation resource type to define the Public RouteTable .
+syntax:
+```
+  publicSubnetRouteTableAssociationAZ1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnetAZ1
+      RouteTableId:
+        Ref: Publicroutetable
+  publicSubnetRouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PublicSubnetAZ2
+      RouteTableId:
+        Ref: Publicroutetable
+```
 
 ### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
 syntax:
