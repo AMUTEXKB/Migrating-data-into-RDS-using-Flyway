@@ -19,11 +19,24 @@ syntax:
         - Key: stack
           Value: production
 ```
-
-### and use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
+### Use the AWS::EC2::InternetGateway resource type to define the InternetGateway,and use the AWS::EC2::VPCGatewayAttachment resource type to associate them with the VPC.
 syntax:
 ```
- PublicSubnet1:
+  igw:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties: {}
+
+  igwa:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref vpc
+      InternetGatewayId: !Ref igw
+
+```
+### use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
+syntax:
+```
+ PublicSubnetAZ1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId:
@@ -35,7 +48,7 @@ syntax:
         - Key: stack
           Value: production
 
-  DatabaseSubnet1:
+  DatabaseSubnetAZ1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId:
@@ -46,7 +59,7 @@ syntax:
         - Key: stack
           Value: production
 
-  PrivateSubnet1:
+  PrivateSubnetAZ1:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId:
@@ -56,6 +69,41 @@ syntax:
       Tags:
         - Key: stack
           Value: production
+
+  PublicSubnetAZ2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId:
+        Ref: vpc
+      CidrBlock: 10.0.3.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: stack
+          Value: production
+
+  PrivateSubnetAZ2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId:
+        Ref: vpc
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: stack
+          Value: production
+
+  DatabaseSubnetAZ2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId:
+        Ref: vpc
+      CidrBlock: 10.0.5.0/24
+      AvailabilityZone: us-east-1b
+      Tags:
+        - Key: stack
+          Value: production
+		  
 ```          
 
 ### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
