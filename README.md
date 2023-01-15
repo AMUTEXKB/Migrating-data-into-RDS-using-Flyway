@@ -191,7 +191,8 @@ syntax:
 ```
 ### 9 Repeat step 6,7,8 to create the services in the AZ2(Availability zone)
 click [more](https://github.com/AMUTEXKB/Migrating-data-into-RDS-using-Flyway/blob/main/flyway.yml) to see the full code 
-### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and Use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
+### 10 Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and Use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
+To use flyway to migrate data into the RDS,you need two security group, the ssh security group that would be attached to our bastion host, the database security group that would be attached to our RDS and we would only allow traffic to this port that is coming from  the bastion host.
 syntax:
 ```
   databasesg:
@@ -217,3 +218,59 @@ syntax:
           CidrIp: 102.89.23.192/32
 
 ```
+### 11 Before we create our database the first thing we have to specify is the subnet group, the subnet groups allow us to specify the subnet we want to create our database in.Use AWS::RDS::DBSubnetGroup to create your database subnet group
+Syntax:
+```
+	myDBSubnetGroup:
+		Properties:
+		  DBSubnetGroupDescription: description
+		  SubnetIds:
+			- !Ref DatabaseSubnet1
+			- !Ref DatabaseSubnet2
+		  Tags:
+			- Key: prod
+			  Value: String
+		Type: 'AWS::RDS::DBSubnetGroup'
+```
+### 12 Use the AWS::RDS::DBInstance resource type to create the RDS services.
+syntax:
+```
+  MyDB1:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBInstanceIdentifier: !Ref DBInstanceID
+      DBName: !Ref DBName
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      Engine: MySQL
+      EngineVersion: 8.0.28
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      VPCSecurityGroups:
+        - !Ref databasesg
+      DBSubnetGroupName: !Ref myDBSubnetGroup
+      AvailabilityZone: us-east-1a
+
+```
+### 13 Use AWS::EC2::KeyPair to create a key pair that we would use to SSH into our instance
+syntax:
+```
+  NewKeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: MyKeyPair
+```	  
+### 14 Use AWS::EC2::Instance to launch the bastion host that we would use to SSH into the RDS in the private subnet.
+syntax:
+```
+  bastonhost:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0b5eea76982371e91
+      KeyName:
+        Ref: NewKeyPair
+      SecurityGroupIds:
+        - Ref: bastionhostsg
+      SubnetId: !Ref PublicSubnetAZ1
+```	  
