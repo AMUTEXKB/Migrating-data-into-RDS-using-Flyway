@@ -6,7 +6,7 @@ STEP 1
 
 Create a CloudFormation template in JSON or YAML format that defines the resources for your VPC, including the VPC itself, subnets, security groups, Elastic IP addresses, load balancers, RDS instances, and EBS volumes.
 
-### Use the AWS::EC2::VPC resource type to define the VPC,
+### 1 Use the AWS::EC2::VPC resource type to define the VPC,
 syntax:
 ```
   vpc:
@@ -19,7 +19,7 @@ syntax:
         - Key: stack
           Value: production
 ```
-### Use the AWS::EC2::InternetGateway resource type to define the InternetGateway,and use the AWS::EC2::VPCGatewayAttachment resource type to associate them with the VPC.
+### 2 Use the AWS::EC2::InternetGateway resource type to define the InternetGateway,and use the AWS::EC2::VPCGatewayAttachment resource type to associate them with the VPC.
 syntax:
 ```
   igw:
@@ -33,7 +33,7 @@ syntax:
       InternetGatewayId: !Ref igw
 
 ```
-### use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
+### 3 use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
 syntax:
 ```
  PublicSubnetAZ1:
@@ -105,7 +105,7 @@ syntax:
           Value: production
 		  
 ```          
-### Use the AWS::EC2::RouteTable resource type to define the Public RouteTable ,and use the AWS::EC2::Route resource type to connect the RouteTable to the InternetGateway.
+### 4 Use the AWS::EC2::RouteTable resource type to define the Public RouteTable ,and use the AWS::EC2::Route resource type to connect the RouteTable to the InternetGateway.
 syntax:
 ```
   Publicroutetable:
@@ -128,7 +128,7 @@ syntax:
         Ref: igw
 
 ```
-### To associate the two public subnet we created earlier to the RouteTable we  use the AWS::EC2::SubnetRouteTableAssociation resource type to define the Public RouteTable .
+### 5 To associate the two public subnet we created earlier to the RouteTable we  use the AWS::EC2::SubnetRouteTableAssociation resource type to define the Public RouteTable .
 syntax:
 ```
   publicSubnetRouteTableAssociationAZ1:
@@ -144,8 +144,54 @@ syntax:
       RouteTableId:
         Ref: Publicroutetable
 ```
-
-### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
+### 6 Use AWS::EC2::NatGateway resource type to create your NATGateway
+syntax:
+```
+  NATGateway:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      AllocationId: !GetAtt NATGatewayEIP.AllocationId
+      SubnetId: !Ref PublicSubnetAZ1
+      Tags:
+        - Key: stack
+          Value: production
+  NATGatewayEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc		  
+```
+### 7 The next thing is to create a private RouteTable, Use AWS::EC2::RouteTable resource type to create your Private RouteTable, and use AWS::EC2::Route to route the traffic to the NATGateway.
+syntax:
+```
+  privateroutetable:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId:
+        Ref: vpc
+      Tags:
+        - Key: stack
+          Value: production
+  RouteNATGateway:
+    DependsOn: NATGateway
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref privateroutetable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway		  
+```
+### 8 To associate the two Private subnet we created earlier to the RouteTable we  use the AWS::EC2::SubnetRouteTableAssociation resource type to define the Private RouteTable .
+syntax:
+```
+  privateSubnetRouteTableAssociationAZ1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref PrivateSubnetAZ1
+      RouteTableId:
+        Ref: privateroutetable
+```
+### 9 Repeat step 6,7,8 to create the services in the AZ2(Availability zone)
+click [more](https://github.com/AMUTEXKB/Migrating-data-into-RDS-using-Flyway/blob/main/flyway.yml) to see the full code 
+### Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and Use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
 syntax:
 ```
   databasesg:
