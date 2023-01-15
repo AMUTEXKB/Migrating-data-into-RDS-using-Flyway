@@ -7,7 +7,7 @@ STEP 1
 Create a CloudFormation template in JSON or YAML format that defines the resources for your VPC, including the VPC itself, subnets, security groups, Elastic IP addresses, load balancers, RDS instances, and EBS volumes.
 
 ### 1 Use the AWS::EC2::VPC resource type to define the VPC,
-![VPC](/Migrating-data-into-RDS-using-Flyway/docs/vpc.JPG)
+![VPC](docs/vpc.JPG)
 syntax:
 ```
   vpc:
@@ -21,7 +21,7 @@ syntax:
           Value: production
 ```
 ### 2 Use the AWS::EC2::InternetGateway resource type to define the InternetGateway,and use the AWS::EC2::VPCGatewayAttachment resource type to associate them with the VPC.
-![IGW](/Migrating-data-into-RDS-using-Flyway/docs/igw.JPG)
+![IGW](docs/igw.JPG)
 syntax:
 ```
   igw:
@@ -36,7 +36,7 @@ syntax:
 
 ```
 ### 3 use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
-![subnet](/Migrating-data-into-RDS-using-Flyway/docs/subnet.JPG)
+![subnet](docs/subnet.JPG)
 syntax:
 ```
  PublicSubnetAZ1:
