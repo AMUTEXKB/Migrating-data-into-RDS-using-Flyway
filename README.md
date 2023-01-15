@@ -8,6 +8,7 @@ Create a CloudFormation template in JSON or YAML format that defines the resourc
 
 ### 1 Use the AWS::EC2::VPC resource type to define the VPC,
 ![VPC](docs/vpc.JPG)
+
 syntax:
 ```
   vpc:
@@ -22,6 +23,7 @@ syntax:
 ```
 ### 2 Use the AWS::EC2::InternetGateway resource type to define the InternetGateway,and use the AWS::EC2::VPCGatewayAttachment resource type to associate them with the VPC.
 ![IGW](docs/igw.JPG)
+
 syntax:
 ```
   igw:
@@ -37,6 +39,7 @@ syntax:
 ```
 ### 3 use the AWS::EC2::Subnet resource type to define the public, private and database subnets in each AZ.
 ![subnet](docs/subnet.JPG)
+
 syntax:
 ```
  PublicSubnetAZ1:
@@ -109,6 +112,8 @@ syntax:
 		  
 ```          
 ### 4 Use the AWS::EC2::RouteTable resource type to define the Public RouteTable ,and use the AWS::EC2::Route resource type to connect the RouteTable to the InternetGateway.
+![Publicroute](docs/publicroute.JPG)
+
 syntax:
 ```
   Publicroutetable:
@@ -148,6 +153,8 @@ syntax:
         Ref: Publicroutetable
 ```
 ### 6 Use AWS::EC2::NatGateway resource type to create your NATGateway
+![NATGateway](docs/natgateway.JPG)
+
 syntax:
 ```
   NATGateway:
@@ -164,6 +171,8 @@ syntax:
       Domain: vpc		  
 ```
 ### 7 The next thing is to create a private RouteTable, Use AWS::EC2::RouteTable resource type to create your Private RouteTable, and use AWS::EC2::Route to route the traffic to the NATGateway.
+![Privateroute](docs/privateroute.JPG)
+
 syntax:
 ```
   privateroutetable:
@@ -183,6 +192,7 @@ syntax:
       NatGatewayId: !Ref NATGateway		  
 ```
 ### 8 To associate the two Private subnet we created earlier to the RouteTable we  use the AWS::EC2::SubnetRouteTableAssociation resource type to define the Private RouteTable .
+
 syntax:
 ```
   privateSubnetRouteTableAssociationAZ1:
@@ -193,9 +203,14 @@ syntax:
         Ref: privateroutetable
 ```
 ### 9 Repeat step 6,7,8 to create the services in the AZ2(Availability zone)
+![AZ2](docs/az2.JPG)
+
 click [more](https://github.com/AMUTEXKB/Migrating-data-into-RDS-using-Flyway/blob/main/flyway.yml) to see the full code 
+
 ### 10 Use the AWS::EC2::SecurityGroup resource type to define the security groups for the public and private subnets,and Use the AWS::EC2::SecurityGroupIngress resource type to specify the inbound traffic rules.
 To use flyway to migrate data into the RDS,you need two security group, the ssh security group that would be attached to our bastion host, the database security group that would be attached to our RDS and we would only allow traffic to this port that is coming from  the bastion host.
+![securitygroup](docs/sg.JPG)
+
 syntax:
 ```
   databasesg:
@@ -222,6 +237,8 @@ syntax:
 
 ```
 ### 11 Before we create our database the first thing we have to specify is the subnet group, the subnet groups allow us to specify the subnet we want to create our database in.Use AWS::RDS::DBSubnetGroup to create your database subnet group
+![DBsubnet](docs/databasesubnet.JPG)
+
 Syntax:
 ```
 	myDBSubnetGroup:
@@ -236,6 +253,8 @@ Syntax:
 		Type: 'AWS::RDS::DBSubnetGroup'
 ```
 ### 12 Use the AWS::RDS::DBInstance resource type to create the RDS services.
+![DB](docs/db.JPG)
+
 syntax:
 ```
   MyDB1:
@@ -256,6 +275,8 @@ syntax:
 
 ```
 ### 13 Use AWS::EC2::KeyPair to create a key pair that we would use to SSH into our instance
+![KeyPair](docs/bastion.JPG)
+
 syntax:
 ```
   NewKeyPair:
@@ -264,6 +285,8 @@ syntax:
       KeyName: MyKeyPair
 ```	  
 ### 14 Use AWS::EC2::Instance to launch the bastion host that we would use to SSH into the RDS in the private subnet.
+![Bastion](docs/basionhost.JPG)
+
 syntax:
 ```
   bastonhost:
