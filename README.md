@@ -412,3 +412,24 @@ Flyway is a database migration tool that can be used to manage and apply databas
 6. You can verify that Flyway is installed correctly by running the command flyway -version in the command line.
 
 7. Once you have Flyway installed, you can then use the command line tool to configure, migrate and validate your database.
+
+## Updating the flyway configuration file
+The Flyway configuration file (flyway.conf) is a file that contains the configuration settings for Flyway. To update the Flyway configuration file, you can follow these steps:
+
+Locate the flyway.conf file. By default, it is located in the Flyway installation directory.
+
+Open the flyway.conf file with a text editor such as Notepad or Sublime Text.
+
+Update the configuration settings as per your requirement. For example, you can update the settings for the database connection, such as the URL, username, and password.
+
+syntax:
+```
+flyway.url=jdbc:mysql://localhost:3306/
+flyway.user=
+flyway.password=
+flyway.locations=filesystem:sql
+flyway.cleanDisabled=false
+```
+
+Save the changes made to the flyway.conf file.
+
